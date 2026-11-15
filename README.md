@@ -86,6 +86,7 @@ docker compose -p counter-sqlite -f compose.sqlite.yaml up -d
 ```
 {"greeting": "Hello from Docker Compose! ᓚ₍ ^. .^₎", "count": 3, "hostname": "4ef3423d6375", "storage": "sqlite"}
 ```
+__Так, счётчик сохраняется после удаления-создания контейнеров.__
 
 ## 3. Redis (отдельное хранилище)
 ### Проверка сохранения данных
