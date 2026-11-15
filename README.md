@@ -9,13 +9,13 @@
 ## 1. Увеличение счётчика (один контейнер)
 Проверка (Powershell)
 ```
-curl http://127.0.0.1:8080/
-curl -X POST http://127.0.0.1:8080/increment
-curl -X POST http://127.0.0.1:8080/increment
-curl -X POST http://127.0.0.1:8080/increment
-curl http://127.0.0.1:8080/
-curl -X POST http://127.0.0.1:8080/increment
-curl http://127.0.0.1:8080/
+curl -fsS http://127.0.0.1:8080/
+curl -fsS -X POST http://127.0.0.1:8080/increment
+curl -fsS -X POST http://127.0.0.1:8080/increment
+curl -fsS -X POST http://127.0.0.1:8080/increment
+curl -fsS http://127.0.0.1:8080/
+curl -fsS -X POST http://127.0.0.1:8080/increment
+curl -fsS http://127.0.0.1:8080/
 ```
 Значение count равняется 4м
 ```
@@ -42,9 +42,9 @@ curl http://127.0.0.1:8080/
 ```
 Увеличим счетчик трижды:
 ```
-curl -X POST http://127.0.0.1:8080/increment
-curl -X POST http://127.0.0.1:8080/increment
-curl -X POST http://127.0.0.1:8080/increment
+curl -fsS -X POST http://127.0.0.1:8080/increment
+curl -fsS -X POST http://127.0.0.1:8080/increment
+curl -fsS -X POST http://127.0.0.1:8080/increment
 ```
 Состояние счётчика:
 ```
