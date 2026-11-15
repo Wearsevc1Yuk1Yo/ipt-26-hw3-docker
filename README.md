@@ -73,6 +73,7 @@ curl -fsS -X POST http://127.0.0.1:8080/increment
 ```
 {"greeting": "Hello from Docker Compose! ᓚ₍ ^. .^₎", "count": 3, "hostname": "e145f046ca11", "storage": "sqlite"}
 ```
+----
 Установим и удалим контейнеры:
 ```
 docker compose -p counter-sqlite -f compose.sqlite.yaml down
@@ -81,7 +82,7 @@ docker compose -p counter-sqlite -f compose.sqlite.yaml down
 ```
 docker compose -p counter-sqlite -f compose.sqlite.yaml up -d
 ```
-Проверим счетчик --- состояние не изменилось, так как мы не удаляли именованный volume.:
+Проверим счетчик - состояние не изменилось, так как мы не удаляли именованный volume.:
 ```
 {"greeting": "Hello from Docker Compose! ᓚ₍ ^. .^₎", "count": 3, "hostname": "4ef3423d6375", "storage": "sqlite"}
 ```
@@ -92,9 +93,9 @@ docker compose -p counter-sqlite -f compose.sqlite.yaml up -d
 Проверяем изначальный count: 
 ```
          curl.exe -fsS http://127.0.0.1:8080/
-```
+
                            ↓
-```
+
             {..., "count": 0, ...}
 ```
 Сделаем 5 запросов POST.
