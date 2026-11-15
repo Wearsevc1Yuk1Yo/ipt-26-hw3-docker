@@ -44,7 +44,7 @@ curl -fsS http://127.0.0.1:8080/
 ```
 {"greeting": "Hello from my Docker!", "count": 4, "hostname": "959efb23b555", "storage": "sqlite"}
 ```
-Логи:
+__Логи (ответ):__
 ```
 2026-11-15 10:25:00,415 listening port=8000 storage=sqlite
 2026-11-15 13:25:45,346 http 172.17.0.1 "GET / HTTP/1.1" 200 -
@@ -96,14 +96,14 @@ docker compose -p counter-sqlite -f compose.sqlite.yaml up -d
 
                            ↓
 
-            {..., "count": 0, ...}
+                 {..., "count": 0, ...}
 ```
 Сделаем 5 запросов POST.
  ```
          curl.exe -fsS http://127.0.0.1:8080/
-```
+
                            ↓
-```
+
 {"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "bb8146edf1da", "storage": "redis"}
 ```
 Теперь проверим, что данные хранятся независимо от контейнеров: удалим и создадим их заново.
@@ -114,9 +114,9 @@ docker compose -p counter-redis up -d
 Далее проверяем счётчик:
  ```
          curl.exe -fsS http://127.0.0.1:8080/
-```
+
                            ↓
-```
+
 {"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}
 ```
 Счётчик по-прежнему равен 5 (count остался прежним). Итого:
@@ -136,9 +136,9 @@ __Проверка пройдена__
 Запоминаем текущий счётчик:
  ```
          curl.exe -fsS http://127.0.0.1:8080/
-```
+
                            ↓
-```
+
 {"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}
 ```
 Запомним, что _hostname_ равен ```eeb40cae816e```. (*)\
