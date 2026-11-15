@@ -143,7 +143,7 @@ curl.exe -fsS http://127.0.0.1:8080/
 
 {"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}
 ```
-Запомним, что ```hostname``` равен ```eeb40cae816e```. *'\
+Запомним, что ```hostname``` равен ```eeb40cae816e```. __*'__\
 __Останавливаем redis:__
 ```
 docker compose -p counter-redis stop redis
@@ -168,7 +168,7 @@ __Запустим redis:__\
 Текущий счётчик сохранился.\
 ```curl.exe -fsS http://127.0.0.1:8080/``` -> ```{"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}```
 
-'* ```hostame``` по-прежнему ```eeb40cae816e```, как и до ```docker compose stop redis```, значит, действительно, приложение не перезапускалось.
+__'*__ ```hostame``` по-прежнему ```eeb40cae816e```, как и до ```docker compose stop redis```, значит, действительно, приложение не перезапускалось.
 
 Далее проверим:
 ```
