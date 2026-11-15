@@ -101,7 +101,7 @@ __Так, счётчик сохраняется после удаления-со
 ```
 Сделаем 5 запросов POST.
  ```
-         curl.exe -fsS http://127.0.0.1:8080/
+curl.exe -fsS http://127.0.0.1:8080/
 
                            ↓
 
@@ -114,13 +114,14 @@ docker compose -p counter-redis up -d
 ```
 Далее проверяем счётчик:
  ```
-         curl.exe -fsS http://127.0.0.1:8080/
+curl.exe -fsS http://127.0.0.1:8080/
 
                            ↓
 
 {"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}
 ```
-Счётчик по-прежнему равен 5 (count остался прежним). Итого:
+Счётчик по-прежнему равен 5 (count остался прежним).\
+Итого:
 
     Начальное значение: 0
     Выполнено POST /increment: 5
@@ -136,14 +137,14 @@ __Проверка пройдена__
 
 Запоминаем текущий счётчик:
  ```
-         curl.exe -fsS http://127.0.0.1:8080/
+curl.exe -fsS http://127.0.0.1:8080/
 
                            ↓
 
 {"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}
 ```
-Запомним, что _hostname_ равен ```eeb40cae816e```. (*)\
-Останавливаем redis:
+Запомним, что ```hostname``` равен ```eeb40cae816e```. *'\
+__Останавливаем redis:__
 ```
 docker compose -p counter-redis stop redis
 ```
@@ -167,7 +168,7 @@ __Запустим redis:__\
 Текущий счётчик сохранился.\
 ```curl.exe -fsS http://127.0.0.1:8080/``` -> ```{"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}```
 
-(*) _hostame_ по-прежнему ```eeb40cae816e```, как и до _docker compose stop redis_, значит, действительно, приложение не перезапускалось.
+'* ```hostame``` по-прежнему ```eeb40cae816e```, как и до ```docker compose stop redis```, значит, действительно, приложение не перезапускалось.
 
 Далее проверим:
 ```
@@ -178,3 +179,6 @@ curl.exe -fsS http://127.0.0.1:8080/
 ```
 {"greeting": "Hello from Docker Compose!~", "count": 6, "hostname": "eeb40cae816e", "storage": "redis"}
 ```
+__Так, пройдены проверки:__
+* Без ручного перезапуска приложения GET / снова возвращает ```count```, следующий POST — ```count + 1```.
+* После остановки ```docker compose stop redis``` приложение продолжает работать: ```GET /healthz ```возвращает 200, а ```GET /readyz``` и ```POST /increment``` — 503.
