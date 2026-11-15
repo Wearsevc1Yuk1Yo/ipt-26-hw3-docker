@@ -3,7 +3,30 @@
 Условие дз доступно по [ссылке](https://github.com/Nikfilk2030/missing_semester_hse_cs/blob/main/2026/amcs/year_1/hw_3/README.md)
 
 ## Структура
-...
+
+```text
+ipt-26-hw3-docker/
+│
+├── app/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── README.md
+│
+├── Dockerfile
+├── .dockerignore
+├── .gitignore
+├── .env.example
+│
+├── compose.sqlite.yaml
+├── compose.yaml
+│
+└── README.md
+```
+Сборка образа:
+
+```powershell
+docker build -t ipt-counter .
+```
 ## Dockerfile
 ...
 ## 1. Увеличение счётчика (один контейнер)
@@ -35,7 +58,7 @@ curl -fsS http://127.0.0.1:8080/
 ## 2. Docker Compose и SQLite (данные)
 После первого вызова :
 ```
-curl http://127.0.0.1:8080/
+curl -fsS http://127.0.0.1:8080/
 ```
 ```
 {"greeting": "Hello from Docker Compose! ᓚ₍ ^. .^₎", "count": 0, "hostname": "e145f046ca11", "storage": "sqlite"}
@@ -61,4 +84,95 @@ docker compose -p counter-sqlite -f compose.sqlite.yaml up -d
 Проверим счетчик --- состояние не изменилось, так как мы не удаляли именованный volume.:
 ```
 {"greeting": "Hello from Docker Compose! ᓚ₍ ^. .^₎", "count": 3, "hostname": "4ef3423d6375", "storage": "sqlite"}
+```
+
+## 3. Redis (отдельное хранилище)
+### Проверка сохранения данных
+
+Проверяем изначальный count: 
+```
+         curl.exe -fsS http://127.0.0.1:8080/
+```
+                           ↓
+```
+            {..., "count": 0, ...}
+```
+Сделаем 5 запросов POST.
+ ```
+         curl.exe -fsS http://127.0.0.1:8080/
+```
+                           ↓
+```
+{"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "bb8146edf1da", "storage": "redis"}
+```
+Теперь проверим, что данные хранятся независимо от контейнеров: удалим и создадим их заново.
+```
+docker compose -p counter-redis down
+docker compose -p counter-redis up -d
+```
+Далее проверяем счётчик:
+ ```
+         curl.exe -fsS http://127.0.0.1:8080/
+```
+                           ↓
+```
+{"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}
+```
+Счётчик по-прежнему равен 5 (count остался прежним). Итого:
+
+    Начальное значение: 0
+    Выполнено POST /increment: 5
+    Значение до удаления контейнеров: 5
+    Значение после повторного запуска: 5
+
+    Результат: счётчик сохранился.
+
+__Проверка пройдена__
+
+### Проверка после восстановления
+Проверка восстановления данных после отключения Redis.
+
+Запоминаем текущий счётчик:
+ ```
+         curl.exe -fsS http://127.0.0.1:8080/
+```
+                           ↓
+```
+{"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}
+```
+Запомним, что _hostname_ равен ```eeb40cae816e```. (*)\
+Останавливаем redis:
+```
+docker compose -p counter-redis stop redis
+```
+При проверке ```curl.exe -i http://127.0.0.1:8080/healthz```
+получаем  ```HTTP/1.0 200 OK```
+
+При проверке ```curl.exe -i http://127.0.0.1:8080/readyz``` получаем ```HTTP/1.0 503 Service Unavailable```.
+
+Проверяем GET/:\
+```curl.exe -i http://127.0.0.1:8080/``` -> ```HTTP/1.0 503 Service Unavailable```.
+
+Проверяем POST/:\
+```curl.exe -i -X POST http://127.0.0.1:8080/increment``` -> ```HTTP/1.0 503 Service Unavailable```
+
+__Запустим redis:__\
+```docker compose -p counter-redis start redis```
+
+Теперь:\
+```curl.exe -i http://127.0.0.1:8080/readyz``` -> ```HTTP/1.0 200 OK```  (мы снова можем обращаться к Redis).
+
+Текущий счётчик сохранился.\
+```curl.exe -fsS http://127.0.0.1:8080/``` -> ```{"greeting": "Hello from Docker Compose!~", "count": 5, "hostname": "eeb40cae816e", "storage": "redis"}```
+
+(*) _hostame_ по-прежнему ```eeb40cae816e```, как и до _docker compose stop redis_, значит, действительно, приложение не перезапускалось.
+
+Далее проверим:
+```
+curl.exe -fsS -X POST http://127.0.0.1:8080/increment
+curl.exe -fsS http://127.0.0.1:8080/
+```
+Результат:
+```
+{"greeting": "Hello from Docker Compose!~", "count": 6, "hostname": "eeb40cae816e", "storage": "redis"}
 ```
