@@ -27,8 +27,6 @@ ipt-26-hw3-docker/
 ```powershell
 docker build -t ipt-counter .
 ```
-## Dockerfile
-...
 ## 1. Увеличение счётчика (один контейнер)
 Проверка (Powershell)
 ```
@@ -40,7 +38,8 @@ curl -fsS http://127.0.0.1:8080/
 curl -fsS -X POST http://127.0.0.1:8080/increment
 curl -fsS http://127.0.0.1:8080/
 ```
-Значение count равняется 4м
+
+После четырёх запросов ```POST /increment``` значение счётчика равно 4.
 ```
 {"greeting": "Hello from my Docker!", "count": 4, "hostname": "959efb23b555", "storage": "sqlite"}
 ```
@@ -99,8 +98,13 @@ __Так, счётчик сохраняется после удаления-со
 
                  {..., "count": 0, ...}
 ```
-Сделаем 5 запросов POST.
+Сделаем 5 запросов POST, проверим счётчик:
  ```
+curl.exe -fsS -X POST http://127.0.0.1:8080/increment
+curl.exe -fsS -X POST http://127.0.0.1:8080/increment
+curl.exe -fsS -X POST http://127.0.0.1:8080/increment
+curl.exe -fsS -X POST http://127.0.0.1:8080/increment
+curl.exe -fsS -X POST http://127.0.0.1:8080/increment
 curl.exe -fsS http://127.0.0.1:8080/
 
                            ↓
